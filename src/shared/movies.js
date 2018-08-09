@@ -1,9 +1,11 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TextInput,} from 'react-native';
 
+import moment from 'moment'
+
 export default class Movies extends React.Component {
     render() {
-        var movie = this.props.movie;
+        //var movie = this.props.movie;
         return (
             <View style={styles.container}>
 
@@ -13,23 +15,23 @@ export default class Movies extends React.Component {
                         <Image
                             style={styles.imageMovie}
                             resizeMode={"cover"}
-                            source={{ uri: movie.imageFilm }}
+                            source={{ uri: "https://image.tmdb.org/t/p/w500" + this.props.movie.backdrop_path }}
                         />
                     </View>
                     <View style={styles.information}>
                         <View style={styles.perc}>
-                            <Image
+                            {/* <Image
                                 style={styles.imagePerc}
                                 resizeMode={"cover"}
                                 source={{ uri: movie.imagePerc }}
-                            />
+                            /> */}
                         </View>
                         <View style={styles.descrip}>
                             <View style={styles.title}>
-                                <Text style={styles.titleText}> {movie.title} </Text>
+                                <Text style={styles.titleText}> {this.props.movie.title} </Text>
                             </View>
                             <View style={styles.date}>
-                                <Text style={styles.dateText}> {movie.date}  </Text>
+                                <Text style={styles.dateText}>  {moment(this.props.movie.release_date).format('DD/MM/YYYY')}  </Text>
                             </View>
                         </View>
                     </View>
@@ -112,3 +114,5 @@ const styles = StyleSheet.create({
 
   //npm install axios
   //npm install
+
+  //npm install moment

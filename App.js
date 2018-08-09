@@ -6,36 +6,34 @@ import axios from "axios";
 
 
 export default class App extends React.Component {
+  
+  state = {
+    movies: [],
+    loading: true
+  }
+  
   getMovieTemplate(movie) {
-    return (
-      <Movies
+     return (
+       <Movies
         movie={movie}
       />
-    )
-  }
+     )
+   }
 
   componentDidMount() {
     let url= "https://api.themoviedb.org/3/movie/popular?api_key=8ec3b0b33a80b4c7bf2e85c2e24e98cf";
-    axios.get(url).then((reponse) => {
-      console.log(response)
+    axios.get(url).then(response => {
+      setTimeout(() => {
+        this.setState({
+          movies: response.data.results,
+          loading: false
+        })
+      },1000)
+
     })
   }
 
   render() {
-    var movies = [{
-      id: 1,
-      title: 'Vingadores: Guerra Infinita',
-      date: 'June 22, 2018',
-      imagePerc: 'http://www.curtisdecora.info/uploads/6/8/9/6/68969693/5042194_orig.png',
-      imageFilm: 'https://image.tmdb.org/t/p/w185_and_h278_bestv2/rkHe0BfOo1f5N2q6rxgdYac7Zf6.jpg',
-    },
-    {
-      id: 2,
-      title: 'Vingadores: Guerra Infinita',
-      date: 'June 22, 2018',
-      imagePerc: 'http://www.curtisdecora.info/uploads/6/8/9/6/68969693/5042194_orig.png',
-      imageFilm: 'https://image.tmdb.org/t/p/w185_and_h278_bestv2/rkHe0BfOo1f5N2q6rxgdYac7Zf6.jpg',
-    }]
     return (
       <ScrollView style={styles.container}>
         <View style={styles.header}>
@@ -58,11 +56,16 @@ export default class App extends React.Component {
           </TextInput>
         </View>
 
+
+        {this.state.loading 
+        ? <Text style={{}}>Loading...</Text>
+        : 
         <FlatList
-          data={movies}
+          data={this.state.movies}
           renderItem={({ item }) => this.getMovieTemplate(item)}
           keyExtractor={(item, index) => item.id.toString()}
         />
+      }
 
       </ScrollView>
     );
