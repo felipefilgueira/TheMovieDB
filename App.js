@@ -6,94 +6,92 @@ import axios from "axios";
 
 
 export default class App extends React.Component {
-  
+
   state = {
+    pageNumber: 1,
     movies: [],
     loading: true
   }
-  
+
   getMovieTemplate(movie) {
-     return (
-       <Movies
+    return (
+      <Movies
         movie={movie}
       />
-     )
-   }
+    )
+  }
 
   componentDidMount() {
-    let url= "https://api.themoviedb.org/3/movie/popular?api_key=8ec3b0b33a80b4c7bf2e85c2e24e98cf";
+    this.getMovies()
+  }
+
+  getMovies() {
+    let url = `https://api.themoviedb.org/3/movie/popular?api_key=8ec3b0b33a80b4c7bf2e85c2e24e98cf&page=${this.state.pageNumber}`;
     axios.get(url).then(response => {
-      setTimeout(() => {
+
+      var actualMovies = this.state.movies;
+      var movesConcatenated =
+        actualMovies.concat(response.data.results)
+
         this.setState({
-          movies: response.data.results,
+          movies: movesConcatenated,
           loading: false
-        })
-      },1000)
+        });
 
     })
   }
 
   render() {
     return (
-      <ScrollView style={styles.container}>
+      <View style={styles.container}>
         <View style={styles.header}>
           <Image
-            style={styles.imageMenu}
-            resizeMode={"cover"}
-            source={{ uri: 'https://paragondigital.com/wp-content/uploads/Menu-Icon2.jpg' }}
+            style={styles.menuImage}
+            source={{
+              uri:
+                'https://21thirteen.com/wp-content/uploads/2016/03/hamburger-menu.jpg',
+            }}
           />
           <Image
-            style={styles.imageMenu}
-            resizeMode={"cover"}
-            source={{ uri: 'https://previews.123rf.com/images/tuktukdesign/tuktukdesign1606/tuktukdesign160600119/59070200-user-icon-man-profile-businessman-avatar-person-icon-in-vector-illustration.jpg' }}
+            style={styles.menuImage}
+            source={{
+              uri:
+                'https://is4-ssl.mzstatic.com/image/thumb/Purple128/v4/1e/80/3f/1e803f98-e9a6-6eab-2cb5-bc32638417c1/source/512x512bb.jpg',
+            }}
+          />
+
+          <Image
+            style={styles.userImage}
+            source={{
+              uri:
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlM_3OPEI1fK0t0qxiUhYZrWBN9Q2A5bDTPo8EolLkObjpWC-E',
+            }}
           />
         </View>
         <View style={styles.search}>
-          <TextInput
-            style={styles.boxInput}
-            placeholder='Search'
-          >
-          </TextInput>
+          <TextInput style={styles.boxInput} placeholder="Search" />
+        </View>
+        <View style={styles.titlePage}>
+          <Text style={styles.titlesPageText}> Filmes Populares </Text>
         </View>
 
-
-        {this.state.loading 
-        ? <Text style={{}}>Loading...</Text>
-        : 
         <FlatList
           data={this.state.movies}
           renderItem={({ item }) => this.getMovieTemplate(item)}
           keyExtractor={(item, index) => item.id.toString()}
+          onEndReached={() => {
+            this.setState({
+              pageNumber: this.state.pageNumber + 1
+            }, () => {this.getMovies()})
+          }}
         />
-      }
-
-      </ScrollView>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-    paddingTop: 18,
-  },
-  header: {
-    backgroundColor: 'black',
-    height: 50,
-    justifyContent: 'space-between',
-    paddingHorizontal: 10,
-    paddingTop: 8,
-    flexDirection: 'row',
-  },
-  imageMenu: {
-    width: 35,
-    height: 35,
 
-  },
-  search: {
-
-  },
   boxInput: {
 
     paddingVertical: 0,
@@ -103,7 +101,44 @@ const styles = StyleSheet.create({
     height: 40,
     width: '100%',
   },
-
+  container: {
+    flex: 1,
+    paddingTop: 20,
+    backgroundColor: '#FFF',
+  },
+  header: {
+    backgroundColor: 'black',
+    height: 60,
+    width: '100%',
+    flexDirection: 'row',
+    paddingTop: 10,
+    justifyContent: 'space-between',
+    paddingHorizontal: 10,
+  },
+  menuImage: {
+    height: 45,
+    width: 45,
+  },
+  userImage: {
+    height: 40,
+    width: 40,
+  },
+  boxInput: {
+    paddingVertical: 0,
+    paddingHorizontal: 20,
+    borderWidth: 2,
+    borderColor: '#DDD',
+    height: 40,
+    width: '100%',
+  },
+  titlePage: {
+    paddingTop: 10,
+    paddingHorizontal: 10,
+  },
+  titlesPageText: {
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
 
 
 });
