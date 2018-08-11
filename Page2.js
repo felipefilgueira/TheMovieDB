@@ -14,7 +14,7 @@ export default class Page2 extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text> TESTEEE </Text>
+        <Text> TESTEEE  {this.props.navigation.getParam("id",0)} </Text>
       </View>
     );
   }
