@@ -117,3 +117,5 @@ const styles = StyleSheet.create({
   //npm install
 
   //npm install moment
+
+  //npm install --save react-navigation
